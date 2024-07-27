@@ -1,66 +1,51 @@
 import { useState } from 'react'
-
-const Button =({handleFeedBack, label})=>{
-  return (
-    <button onClick={handleFeedBack}>{label}</button>
-  )
-}
-const StatisticLine=({value,text})=>{
-  return (
-    <table>
-      <tbody>
-        <tr>
-    <td>{text}</td>
-    <td>{value}</td>
-    </tr>
-    </tbody>
-  </table>
-  
-    
-  )
-}
-
-
+const fillArray=Array.from({ length: 7 }, () => 0)
 const App = () => {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const total=good+bad+neutral;
-  const average=(good-bad)/total 
-const handleFeedBackGood=()=>{
-  setGood(good+1)
+
+
+
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+
+  const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState(fillArray);
+
+  const getRandomInteger =(min, max)=>() => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    const getValue= Math.floor(Math.random() * (max - min)) + min
+
+     setSelected(getValue)
+  }
+const handleVote=()=>{
+  const newPoints=[...points];
+  newPoints[selected]+=1;
+  setPoints(newPoints);
 }
 
-const handleFeedBackNeutral=()=>{
-  setNeutral(neutral+1)
-}
-const handleFeedBackBad=()=>{
-  setBad(bad+1)
-}
-
-
-
+const maxAnecdote=points.findIndex((value)=>value===Math.max(...points));
   return (
-    <div>
-      Give  FeedBack
-
-      <div style={{display:'flex', gap:8 , marginTop:20, marginBottom:20}}>
-      <Button label='good' handleFeedBack={handleFeedBackGood}/>
-      <Button label='neutral' handleFeedBack={handleFeedBackNeutral}/>
-      <Button label='bad' handleFeedBack={handleFeedBackBad}/>
+    <div style={{display:'flex', flexDirection:'column', gap:12}}>
+    <h1>Anecdote of the day</h1>
+    
+      {anecdotes[selected]}
+      <div>
+        <p>has {points[selected]} votes</p>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={getRandomInteger(0,7)}>Next anecdote</button>
       </div>
-      <h2>Statistics</h2>
-    {total===0? <div>No feedBack given</div>:<>
-      <StatisticLine text='good' value={good}/>
-      <StatisticLine text='bad' value={bad}/>
-      <StatisticLine text='neutral' value={neutral}/>
-      <StatisticLine text='all' value={good+bad+neutral}/>
-      <StatisticLine text='average' value={average}/>
-    </>}
-
-
+      <h2>Anecdote with more votes</h2>
+      <p>{anecdotes[maxAnecdote]}</p>
     </div>
   )
 }
 
-export default App
+export default App;
