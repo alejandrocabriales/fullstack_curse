@@ -38,12 +38,13 @@ const maxAnecdote=points.findIndex((value)=>value===Math.max(...points));
     
       {anecdotes[selected]}
       <div>
-        <p>has {points[selected]} votes</p>
+        
       <button onClick={handleVote}>vote</button>
       <button onClick={getRandomInteger(0,7)}>Next anecdote</button>
       </div>
       <h2>Anecdote with more votes</h2>
       <p>{anecdotes[maxAnecdote]}</p>
+      <p>has {points[selected]} votes</p>
     </div>
   )
 }
